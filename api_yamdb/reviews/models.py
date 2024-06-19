@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 
 MAX_LENGTH = 256
@@ -38,3 +39,39 @@ class Title(models.Model):
     class Meta:
         verbose_name = 'Произведение'
         verbose_name_plural = 'Произведения'
+
+
+User = get_user_model()
+
+
+class Review(models.Model):
+    """Модель описывающая отзыв."""
+    title = models.ForeignKey(Title, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.TextField('Текст отзыва')
+    score = models.PositiveIntegerField('Оценка', default=1)
+    pub_date = models.DateTimeField('Дата публикации', auto_now_add=True,
+                                    db_index=True)
+
+    class Meta:
+        constraints = (models.UniqueConstraint(fields=('author', 'title'),
+                                               name='one_author_for_title'),)
+        ordering = ('pub_date', )
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'отзывы'
+        default_related_name = 'reviews'
+
+
+class Comment(models.Model):
+    """Модель описывающая комментарий."""
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    review = models.ForeignKey(Review, on_delete=models.CASCADE)
+    text = models.TextField('Текст комментария')
+    pub_date = models.DateTimeField('Дата комментария', auto_now_add=True,
+                                    db_index=True)
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'комментарии'
+        ordering = ('pub_date', )
+        default_related_name = 'comments'
