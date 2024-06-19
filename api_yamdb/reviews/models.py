@@ -1,3 +1,76 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 
-# Create your models here.
+MAX_LENGTH = 256
+
+
+class Genre(models.Model):
+    """Модель описывающая жанр."""
+    name = models.TextField(verbose_name='Жанр')
+    slug = models.SlugField(unique=True, verbose_name='Слаг жанра')
+
+    class Meta:
+        verbose_name = 'Жанр'
+        verbose_name_plural = 'Жанры'
+
+
+class Category(models.Model):
+    """Модель описывающая категорию."""
+    name = models.TextField(verbose_name='Категория')
+    slug = models.SlugField(unique=True, verbose_name='Слаг категории')
+
+    class Meta:
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
+
+
+class Title(models.Model):
+    """Модель описывающая произведение."""
+    name = models.TextField(max_length=MAX_LENGTH, verbose_name='Название')
+    year = models.IntegerField(verbose_name='Год выпуска')
+    description = models.TextField(verbose_name='Описание')
+    genre = models.ManyToManyField(
+        Genre, verbose_name='Slug жанра')
+    category = models.ForeignKey(
+        Category, on_delete=models.SET_NULL, null=True,
+        verbose_name='Slug категории')
+
+    class Meta:
+        verbose_name = 'Произведение'
+        verbose_name_plural = 'Произведения'
+
+
+User = get_user_model()
+
+
+class Review(models.Model):
+    """Модель описывающая отзыв."""
+    title = models.ForeignKey(Title, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.TextField('Текст отзыва')
+    score = models.PositiveIntegerField('Оценка', default=1)
+    pub_date = models.DateTimeField('Дата публикации', auto_now_add=True,
+                                    db_index=True)
+
+    class Meta:
+        constraints = (models.UniqueConstraint(fields=('author', 'title'),
+                                               name='one_author_for_title'),)
+        ordering = ('pub_date', )
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'отзывы'
+        default_related_name = 'reviews'
+
+
+class Comment(models.Model):
+    """Модель описывающая комментарий."""
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    review = models.ForeignKey(Review, on_delete=models.CASCADE)
+    text = models.TextField('Текст комментария')
+    pub_date = models.DateTimeField('Дата комментария', auto_now_add=True,
+                                    db_index=True)
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'комментарии'
+        ordering = ('pub_date', )
+        default_related_name = 'comments'
