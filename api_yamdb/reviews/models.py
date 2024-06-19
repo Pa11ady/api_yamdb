@@ -29,11 +29,10 @@ class Title(models.Model):
     name = models.TextField(max_length=MAX_LENGTH, verbose_name='Название')
     year = models.IntegerField(verbose_name='Год выпуска')
     description = models.TextField(verbose_name='Описание')
-    genre = models.ForeignKey(
-        Genre, on_delete=models.SET_NULL, blank=True, null=True,
-        verbose_name='Slug жанра')
-    category = models.OneToOneField(
-        Category, on_delete=models.SET_NULL, blank=True, null=True,
+    genre = models.ManyToManyField(
+        Genre, verbose_name='Slug жанра')
+    category = models.ForeignKey(
+        Category, on_delete=models.SET_NULL, null=True,
         verbose_name='Slug категории')
 
     class Meta:
