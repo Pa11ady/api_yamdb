@@ -1,8 +1,63 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.generics import ListCreateAPIView, DestroyAPIView
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import AllowAny, IsAdminUser
 
-from reviews.models import Review, Title
-from .serializers import CommentSerializer, ReviewSerializer
+from reviews.models import Review, Title, Genre, Category
+from .serializers import (CommentSerializer,
+                          ReviewSerializer,
+                          TitleSerializer,
+                          GenreSerializer,
+                          CategorySerializer)
+
+
+class TitleViewSet(ModelViewSet):
+    queryset = Title.objects.all()
+    serializer_class = TitleSerializer
+    pagination_class = PageNumberPagination
+    permission_classes = (IsAdminUser,)
+
+    def get_permissions(self):
+        if self.action == 'retrieve':
+            return (AllowAny(),)
+        return super().get_permissions()
+
+
+class GenreListView(ListCreateAPIView):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
+    permission_classes = (IsAdminUser,)
+
+    def get_permissions(self):
+        if self.action == 'retrieve':
+            return (AllowAny(),)
+        return super().get_permissions()
+
+
+class GenreDestroyView(DestroyAPIView):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
+    permission_classes = (IsAdminUser,)
+    lookup_field = 'slug'
+
+
+class CategoryListView(ListCreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = (IsAdminUser,)
+
+    def get_permissions(self):
+        if self.action == 'retrieve':
+            return (AllowAny(),)
+        return super().get_permissions()
+
+
+class CategoryDestroyView(DestroyAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = (IsAdminUser,)
+    lookup_field = 'slug'
 
 
 class ReviewViewSet(ModelViewSet):
