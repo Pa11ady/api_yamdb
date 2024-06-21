@@ -1,7 +1,7 @@
-from rest_framework.validators import UniqueValidator
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 
-from users.models import User
+from .models import User
 
 FORBIDDEN_USERNAMES = [
     'me',
