@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListCreateAPIView, DestroyAPIView
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.filters import SearchFilter
 
 from reviews.models import Review, Title, Genre, Category
 from .serializers import (CommentSerializer,
@@ -22,6 +23,9 @@ class GenreListView(ListCreateAPIView):
     """Показ и добавление жанров."""
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
+    pagination_class = PageNumberPagination
+    filter_backends = (SearchFilter,)
+    search_fields = ('name',)
 
 
 class GenreDestroyView(DestroyAPIView):
@@ -35,6 +39,9 @@ class CategoryListView(ListCreateAPIView):
     """Показ и добавление категорий."""
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    pagination_class = PageNumberPagination
+    filter_backends = (SearchFilter,)
+    search_fields = ('name',)
 
 
 class CategoryDestroyView(DestroyAPIView):
