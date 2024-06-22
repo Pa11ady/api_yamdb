@@ -3,6 +3,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListCreateAPIView, DestroyAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import SearchFilter
+from rest_framework.permissions import AllowAny
 
 from reviews.models import Review, Title, Genre, Category
 from .serializers import (CommentSerializer,
