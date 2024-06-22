@@ -4,9 +4,9 @@ from rest_framework.routers import SimpleRouter
 from . import views
 
 
-router = SimpleRouter
+router = SimpleRouter()
 
-router.register('titles/', views.TitleViewSet)
+router.register('titles', views.TitleViewSet)
 router.register(r'titles/(?P<title_id>[^/.]+)',
                 views.ReviewViewSet, basename='reviews')
 router.register(r'titles/(?P<title_id>[^/.]+)/reviews/(?P<review_id>[^/.]+)',

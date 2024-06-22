@@ -2,7 +2,6 @@ from django.shortcuts import get_object_or_404
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListCreateAPIView, DestroyAPIView
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import AllowAny, IsAdminUser
 
 from reviews.models import Review, Title, Genre, Category
 from .serializers import (CommentSerializer,
@@ -13,54 +12,40 @@ from .serializers import (CommentSerializer,
 
 
 class TitleViewSet(ModelViewSet):
+    """Обработчик произведений."""
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
     pagination_class = PageNumberPagination
-    permission_classes = (IsAdminUser,)
-
-    def get_permissions(self):
-        if self.action == 'retrieve':
-            return (AllowAny(),)
-        return super().get_permissions()
 
 
 class GenreListView(ListCreateAPIView):
+    """Показ и добавление жанров."""
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    permission_classes = (IsAdminUser,)
-
-    def get_permissions(self):
-        if self.action == 'retrieve':
-            return (AllowAny(),)
-        return super().get_permissions()
 
 
 class GenreDestroyView(DestroyAPIView):
+    """Удаление жанров."""
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    permission_classes = (IsAdminUser,)
     lookup_field = 'slug'
 
 
 class CategoryListView(ListCreateAPIView):
+    """Показ и добавление категорий."""
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = (IsAdminUser,)
-
-    def get_permissions(self):
-        if self.action == 'retrieve':
-            return (AllowAny(),)
-        return super().get_permissions()
 
 
 class CategoryDestroyView(DestroyAPIView):
+    """Удаление категорий."""
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = (IsAdminUser,)
     lookup_field = 'slug'
 
 
 class ReviewViewSet(ModelViewSet):
+    """Обработчик отзывов."""
     http_method_names = ('get', 'patch', 'post', 'delete')
     serializer_class = ReviewSerializer
 
@@ -76,6 +61,7 @@ class ReviewViewSet(ModelViewSet):
 
 
 class CommentViewSet(ModelViewSet):
+    """Обработчик комментариев."""
     http_method_names = ('get', 'patch', 'post', 'delete')
     serializer_class = CommentSerializer
 

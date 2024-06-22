@@ -1,13 +1,16 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
-MAX_LENGTH = 256
+MAX_LENGTH_NAME = 256
+MAX_LENGTH_SLUG = 50
 
 
 class Genre(models.Model):
     """Модель описывающая жанр."""
-    name = models.TextField(verbose_name='Жанр')
-    slug = models.SlugField(unique=True, verbose_name='Слаг жанра')
+    name = models.TextField(max_length=MAX_LENGTH_NAME,
+                            verbose_name='Жанр')
+    slug = models.SlugField(max_length=MAX_LENGTH_SLUG, unique=True,
+                            verbose_name='Слаг жанра')
 
     class Meta:
         verbose_name = 'Жанр'
@@ -16,8 +19,10 @@ class Genre(models.Model):
 
 class Category(models.Model):
     """Модель описывающая категорию."""
-    name = models.TextField(verbose_name='Категория')
-    slug = models.SlugField(unique=True, verbose_name='Слаг категории')
+    name = models.TextField(max_length=MAX_LENGTH_NAME,
+                            verbose_name='Категория')
+    slug = models.SlugField(max_length=MAX_LENGTH_SLUG, unique=True,
+                            verbose_name='Слаг категории')
 
     class Meta:
         verbose_name = 'Категория'
@@ -26,7 +31,7 @@ class Category(models.Model):
 
 class Title(models.Model):
     """Модель описывающая произведение."""
-    name = models.TextField(max_length=MAX_LENGTH, verbose_name='Название')
+    name = models.TextField(max_length=MAX_LENGTH_NAME, verbose_name='Название')
     year = models.IntegerField(verbose_name='Год выпуска')
     description = models.TextField(verbose_name='Описание')
     genre = models.ManyToManyField(
