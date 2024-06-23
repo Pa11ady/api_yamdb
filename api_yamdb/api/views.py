@@ -18,6 +18,7 @@ class TitleViewSet(ModelViewSet):
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
     pagination_class = PageNumberPagination
+    permission_classes = (AdminPermission,)
 
 
 class GenreListView(ListCreateAPIView):

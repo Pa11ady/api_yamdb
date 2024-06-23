@@ -22,8 +22,8 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class TitleSerializer(serializers.ModelSerializer):
     """Сериализатор произведений."""
-    genre = serializers.SlugRelatedField(queryset=Genre.objects.all(), slug_field='slug', many=True)
-    category = CategorySerializer()
+    genre = GenreSerializer(read_only=True, many=True)
+    category = CategorySerializer(read_only=True)
    
     class Meta:
         model = Title
