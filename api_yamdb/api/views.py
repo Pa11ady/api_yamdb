@@ -3,9 +3,9 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListCreateAPIView, DestroyAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import SearchFilter
-from rest_framework.permissions import AllowAny
 
 from reviews.models import Review, Title, Genre, Category
+from .permissions import AdminPermission
 from .serializers import (CommentSerializer,
                           ReviewSerializer,
                           TitleSerializer,
@@ -25,6 +25,7 @@ class GenreListView(ListCreateAPIView):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     pagination_class = PageNumberPagination
+    permission_classes = (AdminPermission,)
     filter_backends = (SearchFilter,)
     search_fields = ('name',)
 
@@ -33,6 +34,7 @@ class GenreDestroyView(DestroyAPIView):
     """Удаление жанров."""
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
+    permission_classes = (AdminPermission,)
     lookup_field = 'slug'
 
 
@@ -41,6 +43,7 @@ class CategoryListView(ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     pagination_class = PageNumberPagination
+    permission_classes = (AdminPermission,)
     filter_backends = (SearchFilter,)
     search_fields = ('name',)
 
@@ -49,6 +52,7 @@ class CategoryDestroyView(DestroyAPIView):
     """Удаление категорий."""
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = (AdminPermission,)
     lookup_field = 'slug'
 
 
