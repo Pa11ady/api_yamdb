@@ -15,6 +15,7 @@ from .serializers import (CommentSerializer,
 
 class TitleViewSet(ModelViewSet):
     """Обработчик произведений."""
+    http_method_names = ('get', 'patch', 'post', 'delete')
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
     pagination_class = PageNumberPagination
