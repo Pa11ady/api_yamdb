@@ -80,6 +80,7 @@ class CommentViewSet(ModelViewSet):
     """Обработчик комментариев."""
     http_method_names = ('get', 'patch', 'post', 'delete')
     serializer_class = CommentSerializer
+    permission_classes = (AdminOrAuthorOrReadOnly,)
 
     def get_review(self):
         return get_object_or_404(Review, pk=self.kwargs['review_id'],

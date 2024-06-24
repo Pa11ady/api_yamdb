@@ -1,5 +1,6 @@
-from django.contrib.auth import get_user_model
 from django.db import models
+
+from users.models import User
 
 MAX_LENGTH_NAME: int = 256
 MAX_LENGTH_SLUG: int = 50
@@ -45,9 +46,6 @@ class Title(models.Model):
         verbose_name_plural = 'Произведения'
 
 
-User = get_user_model()
-
-
 class Review(models.Model):
     """Модель описывающая отзыв."""
     title = models.ForeignKey(Title, on_delete=models.CASCADE)
@@ -60,6 +58,7 @@ class Review(models.Model):
     class Meta:
         constraints = (models.UniqueConstraint(fields=('author', 'title'),
                                                name='one_author_for_title'),)
+     
         ordering = ('pub_date', )
         verbose_name = 'Отзыв'
         verbose_name_plural = 'отзывы'
