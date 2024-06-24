@@ -7,10 +7,11 @@ from . import views
 router = SimpleRouter()
 
 router.register('titles', views.TitleViewSet)
-router.register(r'titles/(?P<title_id>[^/.]+)',
-                views.ReviewViewSet, basename='reviews')
-router.register(r'titles/(?P<title_id>[^/.]+)/reviews/(?P<review_id>[^/.]+)',
-                views.CommentViewSet, basename='comments')
+router.register(r'titles/(?P<title_id>\d+)/reviews', views.ReviewViewSet,
+                basename='review')
+router.register(
+    r'titles/(?P<title_id>\d+)/reviews/(?P<review_id>\d+)/comments',
+    views.CommentViewSet, basename='comment')
 
 urlpatterns = [
     path('', include(router.urls)),
