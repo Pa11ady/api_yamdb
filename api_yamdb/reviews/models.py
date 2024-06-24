@@ -1,8 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
-MAX_LENGTH_NAME = 256
-MAX_LENGTH_SLUG = 50
+MAX_LENGTH_NAME: int = 256
+MAX_LENGTH_SLUG: int = 50
 
 
 class Genre(models.Model):

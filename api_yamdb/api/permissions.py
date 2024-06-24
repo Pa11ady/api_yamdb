@@ -7,4 +7,4 @@ class AdminPermission(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         if user.is_authenticated:
-            return user.role == 'admin'
+            return user.role in ('admin', 'superuser')
