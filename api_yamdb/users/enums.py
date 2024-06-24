@@ -6,6 +6,7 @@ class UserRoles(Enum):
     user = 'user'
     moderator = 'moderator'
     admin = 'admin'
+    superuser = 'superuser'
 
     @classmethod
     def choices(cls):
