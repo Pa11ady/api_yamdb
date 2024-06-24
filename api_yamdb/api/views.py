@@ -1,11 +1,12 @@
 from django.shortcuts import get_object_or_404
+import rest_framework
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListCreateAPIView, DestroyAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import SearchFilter
 
 from reviews.models import Review, Title, Genre, Category
-from .permissions import AdminPermission
+from .permissions import AdminPermission, AdminOrAuthorOrReadOnly
 from .serializers import (CommentSerializer,
                           ReviewSerializer,
                           TitleSerializer,
@@ -62,6 +63,7 @@ class ReviewViewSet(ModelViewSet):
     """Обработчик отзывов."""
     http_method_names = ('get', 'patch', 'post', 'delete')
     serializer_class = ReviewSerializer
+    permission_classes = (AdminOrAuthorOrReadOnly,)
 
     def get_title(self):
         return get_object_or_404(Title, pk=self.kwargs['title_id'])
@@ -89,3 +91,4 @@ class CommentViewSet(ModelViewSet):
 
     def get_queryset(self):
         return self.get_review().comments.all()
+    
