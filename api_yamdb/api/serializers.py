@@ -24,10 +24,10 @@ class TitleSerializer(serializers.ModelSerializer):
     """Сериализатор произведений."""
     genre = GenreSerializer(read_only=True, many=True)
     category = CategorySerializer(read_only=True)
-
+   
     class Meta:
         model = Title
-        fields = ('name', 'year', 'description', 'genre', 'category')
+        fields = ('id', 'name', 'year', 'description', 'genre', 'category')
 
     def validate_year(self, value):
         year = date.today().year

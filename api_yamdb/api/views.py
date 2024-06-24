@@ -2,9 +2,10 @@ from django.shortcuts import get_object_or_404
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListCreateAPIView, DestroyAPIView
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import AllowAny, IsAdminUser
+from rest_framework.filters import SearchFilter
 
 from reviews.models import Review, Title, Genre, Category
+from .permissions import AdminPermission
 from .serializers import (CommentSerializer,
                           ReviewSerializer,
                           TitleSerializer,
@@ -13,54 +14,52 @@ from .serializers import (CommentSerializer,
 
 
 class TitleViewSet(ModelViewSet):
+    """Обработчик произведений."""
+    http_method_names = ('get', 'patch', 'post', 'delete')
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
     pagination_class = PageNumberPagination
-    permission_classes = (IsAdminUser,)
-
-    def get_permissions(self):
-        if self.action == 'retrieve':
-            return (AllowAny(),)
-        return super().get_permissions()
+    permission_classes = (AdminPermission,)
 
 
 class GenreListView(ListCreateAPIView):
+    """Показ и добавление жанров."""
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    permission_classes = (IsAdminUser,)
-
-    def get_permissions(self):
-        if self.action == 'retrieve':
-            return (AllowAny(),)
-        return super().get_permissions()
+    pagination_class = PageNumberPagination
+    permission_classes = (AdminPermission,)
+    filter_backends = (SearchFilter,)
+    search_fields = ('name',)
 
 
 class GenreDestroyView(DestroyAPIView):
+    """Удаление жанров."""
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    permission_classes = (IsAdminUser,)
+    permission_classes = (AdminPermission,)
     lookup_field = 'slug'
 
 
 class CategoryListView(ListCreateAPIView):
+    """Показ и добавление категорий."""
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = (IsAdminUser,)
-
-    def get_permissions(self):
-        if self.action == 'retrieve':
-            return (AllowAny(),)
-        return super().get_permissions()
+    pagination_class = PageNumberPagination
+    permission_classes = (AdminPermission,)
+    filter_backends = (SearchFilter,)
+    search_fields = ('name',)
 
 
 class CategoryDestroyView(DestroyAPIView):
+    """Удаление категорий."""
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = (IsAdminUser,)
+    permission_classes = (AdminPermission,)
     lookup_field = 'slug'
 
 
 class ReviewViewSet(ModelViewSet):
+    """Обработчик отзывов."""
     http_method_names = ('get', 'patch', 'post', 'delete')
     serializer_class = ReviewSerializer
 
@@ -76,6 +75,7 @@ class ReviewViewSet(ModelViewSet):
 
 
 class CommentViewSet(ModelViewSet):
+    """Обработчик комментариев."""
     http_method_names = ('get', 'patch', 'post', 'delete')
     serializer_class = CommentSerializer
 
