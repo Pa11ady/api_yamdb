@@ -41,9 +41,9 @@ class Title(models.Model):
     name = models.TextField(max_length=MAX_LENGTH_NAME,
                             verbose_name='Название')
     year = models.IntegerField(verbose_name='Год выпуска')
-    description = models.TextField(verbose_name='Описание')
+    description = models.TextField(verbose_name='Описание', blank=True)
     genre = models.ManyToManyField(
-        Genre, verbose_name='Slug жанра')
+        Genre, verbose_name='Slug жанра', blank=False)
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, null=True,
         verbose_name='Slug категории')
@@ -61,7 +61,7 @@ class Review(models.Model):
     title = models.ForeignKey(Title, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField('Текст отзыва')
-    score = models.PositiveIntegerField('Оценка', default=1)
+    score = models.PositiveIntegerField('Оценка', blank=False)
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True,
                                     db_index=True)
 
