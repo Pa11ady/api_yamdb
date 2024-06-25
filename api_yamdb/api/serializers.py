@@ -1,4 +1,5 @@
 from datetime import date
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
 from reviews.models import Title, Genre, Category, Review, Comment
@@ -67,6 +68,24 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ('id', 'text', 'author', 'score', 'pub_date')
+
+    def validate(self, data):
+        if self.context['request'].method == 'POST':
+            title = get_object_or_404(
+                Title,
+                id=self.context['view'].kwargs.get('title_id')
+            )
+            author = self.context['request'].user
+            if Review.objects.filter(title=title, author=author).exists():
+                raise serializers.ValidationError(
+                    'Вы уже оставляли отзыв к этому произведению!'
+                )
+        return data
+
+    def validate_score(self, score):
+        if not 1 <= score <= 10:
+            raise serializers.ValidationError('Оценка должна быть от 1 до 10!')
+        return score
 
 
 class CommentSerializer(serializers.ModelSerializer):
