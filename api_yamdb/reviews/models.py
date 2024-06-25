@@ -17,6 +17,9 @@ class Genre(models.Model):
         verbose_name = 'Жанр'
         verbose_name_plural = 'Жанры'
 
+    def __str__(self):
+        return self.name
+
 
 class Category(models.Model):
     """Модель описывающая категорию."""
@@ -29,10 +32,14 @@ class Category(models.Model):
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 
+    def __str__(self):
+        return self.name
+
 
 class Title(models.Model):
     """Модель описывающая произведение."""
-    name = models.TextField(max_length=MAX_LENGTH_NAME, verbose_name='Название')
+    name = models.TextField(max_length=MAX_LENGTH_NAME,
+                            verbose_name='Название')
     year = models.IntegerField(verbose_name='Год выпуска')
     description = models.TextField(verbose_name='Описание')
     genre = models.ManyToManyField(
@@ -44,6 +51,9 @@ class Title(models.Model):
     class Meta:
         verbose_name = 'Произведение'
         verbose_name_plural = 'Произведения'
+
+    def __str__(self):
+        return self.name
 
 
 class Review(models.Model):
@@ -58,11 +68,14 @@ class Review(models.Model):
     class Meta:
         constraints = (models.UniqueConstraint(fields=('author', 'title'),
                                                name='one_author_for_title'),)
-     
+
         ordering = ('pub_date', )
         verbose_name = 'Отзыв'
         verbose_name_plural = 'отзывы'
         default_related_name = 'reviews'
+
+    def __str__(self):
+        return self.title
 
 
 class Comment(models.Model):
@@ -78,3 +91,6 @@ class Comment(models.Model):
         verbose_name_plural = 'комментарии'
         ordering = ('pub_date', )
         default_related_name = 'comments'
+
+    def __str__(self):
+        return self.review
