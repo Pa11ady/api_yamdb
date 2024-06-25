@@ -20,14 +20,32 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ('name', 'slug')
 
 
-class TitleSerializer(serializers.ModelSerializer):
-    """Сериализатор произведений."""
+class TitleSerializerRead(serializers.ModelSerializer):
+    """Сериализатор произведения чтение."""
+
     genre = GenreSerializer(read_only=True, many=True)
     category = CategorySerializer(read_only=True)
-   
+    rating = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        fields = '__all__'
+        model = Title
+
+
+class TitleSerializerWrite(serializers.ModelSerializer):
+    """Сериализатор произведения запись."""
+
+    genre = serializers.SlugRelatedField(
+        queryset=Genre.objects.all(),
+        slug_field='slug',
+        many=True,
+    )
+    category = serializers.SlugRelatedField(queryset=Category.objects.all(),
+                                            slug_field='slug')
+
     class Meta:
         model = Title
-        fields = ('id', 'name', 'year', 'description', 'genre', 'category')
+        fields = '__all__'
 
     def validate_year(self, value):
         year = date.today().year
@@ -36,6 +54,9 @@ class TitleSerializer(serializers.ModelSerializer):
                 'Год выпуска не может быть в будущем!'
             )
         return value
+
+    def to_representation(self, instance):
+        return TitleSerializerRead(instance).data
 
 
 class ReviewSerializer(serializers.ModelSerializer):

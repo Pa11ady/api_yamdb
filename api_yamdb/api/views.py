@@ -1,5 +1,7 @@
+from django_filters.rest_framework import CharFilter, FilterSet
+from django.db.models import Avg
 from django.shortcuts import get_object_or_404
-import rest_framework
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListCreateAPIView, DestroyAPIView
 from rest_framework.pagination import PageNumberPagination
@@ -9,18 +11,35 @@ from reviews.models import Review, Title, Genre, Category
 from .permissions import AdminPermission, AdminOrAuthorOrReadOnly
 from .serializers import (CommentSerializer,
                           ReviewSerializer,
-                          TitleSerializer,
+                          TitleSerializerWrite,
+                          TitleSerializerRead,
                           GenreSerializer,
                           CategorySerializer)
+
+
+class Filter(FilterSet):
+    category = CharFilter(field_name='category__slug')
+    genre = CharFilter(field_name='genre__slug')
+
+    class Meta:
+        model = Title
+        fields = ('category', 'genre', 'name', 'year')
 
 
 class TitleViewSet(ModelViewSet):
     """Обработчик произведений."""
     http_method_names = ('get', 'patch', 'post', 'delete')
-    queryset = Title.objects.all()
-    serializer_class = TitleSerializer
-    pagination_class = PageNumberPagination
+    queryset = Title.objects.annotate(rating=Avg('reviews__score')).order_by(
+        'name'
+    )
     permission_classes = (AdminPermission,)
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = Filter
+
+    def get_serializer_class(self):
+        if self.request.method in {'POST', 'PATCH'}:
+            return TitleSerializerWrite
+        return TitleSerializerRead
 
 
 class GenreListView(ListCreateAPIView):
