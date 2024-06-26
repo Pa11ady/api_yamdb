@@ -4,11 +4,17 @@ from django.db import models
 
 from users.enums import UserRoles
 
+MAX_LENGHT_NAME: int = 150
+MAX_LENGHT_EMAIL: int = 254
+MAX_LENGHT_ROLE: int = 20
+LIMIT: int = 50
+
 
 class User(AbstractUser):
+    """Модель пользователя."""
     username = models.CharField(
         verbose_name='Имя пользователя',
-        max_length=150,
+        max_length=MAX_LENGHT_NAME,
         unique=True,
         db_index=True,
         validators=[
@@ -20,17 +26,17 @@ class User(AbstractUser):
     )
     email = models.EmailField(
         verbose_name='Email',
-        max_length=254,
+        max_length=MAX_LENGHT_EMAIL,
         unique=True
     )
     first_name = models.CharField(
         verbose_name='Имя',
-        max_length=150,
+        max_length=MAX_LENGHT_NAME,
         blank=True
     )
     last_name = models.CharField(
         verbose_name='Фамилия',
-        max_length=150,
+        max_length=MAX_LENGHT_NAME,
         blank=True
     )
     bio = models.TextField(
@@ -39,7 +45,7 @@ class User(AbstractUser):
     )
     role = models.CharField(
         verbose_name='Роль',
-        max_length=20,
+        max_length=MAX_LENGHT_ROLE,
         choices=UserRoles.choices(),
         default=UserRoles.user.name
     )
@@ -56,7 +62,7 @@ class User(AbstractUser):
         ]
 
     def __str__(self):
-        return self.username[:50]
+        return self.username[:LIMIT]
 
     @property
     def is_admin(self):
