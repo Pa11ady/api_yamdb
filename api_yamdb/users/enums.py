@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class UserRoles(Enum):
-
+    """Обработка ролей."""
     user = 'user'
     moderator = 'moderator'
     admin = 'admin'

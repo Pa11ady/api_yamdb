@@ -22,6 +22,7 @@ from .utils import send_confirmation_code
 class UserViewSet(mixins.CreateModelMixin,
                   mixins.ListModelMixin,
                   viewsets.GenericViewSet):
+    """Обработчик пользователей."""
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (IsSuperUserOrAdminAndIsAuth,)
@@ -70,6 +71,7 @@ class UserViewSet(mixins.CreateModelMixin,
 
 class UserCreateViewSet(mixins.CreateModelMixin,
                         viewsets.GenericViewSet):
+    """Создание пользователей."""
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
     permission_classes = (permissions.AllowAny,)
@@ -97,6 +99,7 @@ class UserCreateViewSet(mixins.CreateModelMixin,
 
 class UserReceiveTokenViewSet(mixins.CreateModelMixin,
                               viewsets.GenericViewSet):
+    """Получение токена."""
     queryset = User.objects.all()
     serializer_class = UserReceiveTokenSerializer
     permission_classes = (permissions.AllowAny,)

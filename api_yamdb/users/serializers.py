@@ -11,6 +11,7 @@ MAX_FIELD_LENGTH = 254
 
 
 class UserCreateSerializer(serializers.Serializer):
+    """Сериализатор создание пользователя."""
     username = serializers.RegexField(
         regex=r'^[\w.@+-]+\Z',
         max_length=MAX_USERNAME_LENGTH,
@@ -41,6 +42,7 @@ class UserCreateSerializer(serializers.Serializer):
 
 
 class UserReceiveTokenSerializer(serializers.Serializer):
+    """Сериализатор получение токена."""
     username = serializers.CharField(
         required=True,
         max_length=MAX_USERNAME_LENGTH,
@@ -52,6 +54,7 @@ class UserReceiveTokenSerializer(serializers.Serializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """Сериализатор пользователя."""
     username = serializers.RegexField(
         regex=r'^[\w.@+-]',
         required=True,

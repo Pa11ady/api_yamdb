@@ -1,7 +1,8 @@
-from django_filters.rest_framework import CharFilter, FilterSet
 from django.db.models import Avg
 from django.shortcuts import get_object_or_404
-from django_filters.rest_framework import DjangoFilterBackend
+from django_filters.rest_framework import (DjangoFilterBackend,
+                                           CharFilter,
+                                           FilterSet)
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListCreateAPIView, DestroyAPIView
 from rest_framework.pagination import PageNumberPagination
