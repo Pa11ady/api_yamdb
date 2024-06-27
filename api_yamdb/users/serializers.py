@@ -3,19 +3,21 @@ from rest_framework.validators import UniqueValidator
 
 from .models import User
 
-FORBIDDEN_USERNAMES = [
+FORBIDDEN_USERNAMES = (
     'me',
-]
+)
+MAX_USERNAME_LENGTH = 150
+MAX_FIELD_LENGTH = 254
 
 
 class UserCreateSerializer(serializers.Serializer):
     username = serializers.RegexField(
         regex=r'^[\w.@+-]+\Z',
-        max_length=150,
+        max_length=MAX_USERNAME_LENGTH,
         required=True
     )
     email = serializers.EmailField(
-        max_length=254,
+        max_length=MAX_FIELD_LENGTH,
         required=True
     )
 
@@ -41,10 +43,10 @@ class UserCreateSerializer(serializers.Serializer):
 class UserReceiveTokenSerializer(serializers.Serializer):
     username = serializers.CharField(
         required=True,
-        max_length=150,
+        max_length=MAX_USERNAME_LENGTH,
     )
     confirmation_code = serializers.CharField(
-        max_length=254,
+        max_length=MAX_FIELD_LENGTH,
         required=True
     )
 
@@ -53,14 +55,14 @@ class UserSerializer(serializers.ModelSerializer):
     username = serializers.RegexField(
         regex=r'^[\w.@+-]',
         required=True,
-        max_length=150,
+        max_length=MAX_USERNAME_LENGTH,
         validators=[
             UniqueValidator(queryset=User.objects.all())
         ],
     )
     email = serializers.EmailField(
         required=True,
-        max_length=254,
+        max_length=MAX_FIELD_LENGTH,
         validators=[
             UniqueValidator(queryset=User.objects.all())
         ],
