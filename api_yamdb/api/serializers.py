@@ -63,7 +63,7 @@ class TitleSerializerWrite(serializers.ModelSerializer):
         return TitleSerializerRead(instance).data
 
     def validate_genre(self, value):
-        if len(value) == 0:
+        if not value:
             raise serializers.ValidationError(
                 'Заполните список жанров!'
             )
