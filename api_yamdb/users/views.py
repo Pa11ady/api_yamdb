@@ -84,7 +84,7 @@ class UserCreateViewSet(mixins.CreateModelMixin,
             username=username,
             email=email
         ).exists():
-            user, _ = User.objects.get_or_create(
+            user, __ = User.objects.get_or_create(
                 username=username,
                 email=email
             )
